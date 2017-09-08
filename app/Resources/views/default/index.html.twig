@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="main-block">
+        <div class="upper-block">
+            <div class="panel-left">
+                <h1>
+                    Lorem Ipsum
+                </h1>
+                <span style="height:32px;"></span>
+                <p class="text">
+                    Nulla non tortor ut lorem ornare auctor.
+                    Quisque sagittis rutrum purus, vitae
+                    accumsan dui imperdiet non. Nulla aliquet,
+                    leo in dapibus posuere, ante tellus aliquet
+                    mi, et venenatis enim turpis eget nibh.
+                    Maecenas nec quam massa. Mauris iaculis
+                    egestas erat, eu dictum purus ultricies non.
+                    Phasellus pretium purus massa, at
+                    euismod dui feugiat quis. Aenean id ligula
+                    facilisis, posuere sapien vitae, pulvinar
+                    urna. In et pulvinar lorem. Vestibulum
+                    luctus convallis urna nec scelerisque.
+                </p>
+                <span style="height:28px;"></span>
+                <p class="text">
+                    Nam faucibus lacus at auctor euismod.
+                    Proin est massa, sagittis eget porta sed,
+                    convallis aliquet lacus. Vestibulum blandit
+                    egestas ultrices. Sed mattis sapien arcu,
+                    pretium fringilla turpis pulvinar in. Donec
+                    dolor risus, aliquam vel elit eu, finibus
+                    maximus eros. Duis viverra ipsum varius
+                    ullamcorper consequat. Quisque ac magna
+                    tortor. In non placerat nulla. Etiam
+                    accumsan vitae urna vitae finibus. Nam
+                    commodo libero at lacus sodales, quis
+                    mattis lorem ultrices. Nam interdum
+                    tempus congue.
+                </p>
+
+                <span style="height:28px;"></span>
+                <p class="text" style="text-align: left;">
+                    Lorem ipsum
+                </p>
+            </div>
+
+            <div class="panel-right">
+                <img src="{{ asset('images/photo.jpg') }}">
+            </div>
+        </div>
+        <div class="lower-block">
+            <div class="table-block">
+                <div class="btn-new-item">
+                    <button id="create-user" class="btn-new-image" onclick="myFunction()"></button>
+                </div>
+                <div id="table-row" class="table-row">
+                    <div class="table-fields">
+                            <span class="td"><input readonly title="item-detail-1" class="item-detail"/></span>
+                            <span class="td"><input readonly title="item-detail-2" class="item-detail"/></span>
+                            <span class="td"><input readonly title="item-detail-3" class="item-detail"/></span>
+                    </div>
+                    <div class="table-buttons">
+                        <div class="table-btn-edit">
+                            <button id="btn-edit" class="btn-edit-item"></button>
+                        </div>
+                        <div class="table-btn-delete">
+                            <button id="btn-delete" class="btn-delete-item"></button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div id="dialog-form" title="Create new user">
+                <p class="validateTips">All form fields are required.</p>
+
+                <form>
+                    <fieldset>
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
+
+                        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+                    </fieldset>
+                </form>
+            </div>
+
+
+            <div id="users-contain" class="ui-widget">
+                <h1>Existing Users:</h1>
+                <table id="users" class="ui-widget ui-widget-content">
+                    <thead>
+                    <tr class="ui-widget-header ">
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>john.doe@example.com</td>
+                        <td>johndoe1</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="create-user">Create new user</button>
+            </div>
+
+
+        </div>
+
+
+{% endblock %}
+
+

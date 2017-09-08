@@ -1,0 +1,12 @@
+<div id="newDepartmentForm" class="form">
+    {{ form_start(itemForm) }}
+        {{ form_row(itemForm.itemDetail1) }}
+        {{ form_row(itemForm.itemDetail2) }}
+        {{ form_row(itemForm.itemDetail3) }}
+
+    <button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>
+    <button id="btn-form-cancel" type="submit" class="btn-form" formnovalidate>Cancel</button>
+
+    {{ form_end(itemForm) }}
+
+</div>

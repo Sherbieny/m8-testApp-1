@@ -52,13 +52,13 @@
         <div class="lower-block">
             <div class="table-block">
                 <div class="btn-new-item">
-                    <button id="create-user" class="btn-new-image" onclick="myFunction()"></button>
+                    <button id="create-user" class="btn-new-image"></button>
                 </div>
                 <div id="table-row" class="table-row">
                     <div class="table-fields">
-                            <span class="td"><input readonly title="item-detail-1" class="item-detail"/></span>
-                            <span class="td"><input readonly title="item-detail-2" class="item-detail"/></span>
-                            <span class="td"><input readonly title="item-detail-3" class="item-detail"/></span>
+                            <span class="td"><input readonly title="item-detail-1" value="" class="item-detail"/></span>
+                            <span class="td"><input readonly title="item-detail-2" value="" class="item-detail"/></span>
+                            <span class="td"><input readonly title="item-detail-3" value="" class="item-detail"/></span>
                     </div>
                     <div class="table-buttons">
                         <div class="table-btn-edit">
@@ -68,26 +68,56 @@
                             <button id="btn-delete" class="btn-delete-item"></button>
                         </div>
                     </div>
+
                 </div>
 
 
 
             </div>
 
+            {#<div id="dialog-form" title="Create new user">#}
+                {#<p class="validateTips">All form fields are required.</p>#}
+
+                {#<form>#}
+                    {#<fieldset>#}
+                        {#<label for="name">Name</label>#}
+                        {#<input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">#}
+                        {#<label for="email">Email</label>#}
+                        {#<input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">#}
+                        {#<label for="password">Password</label>#}
+                        {#<input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">#}
+
+                        {#<!-- Allow form submission with keyboard without duplicating the dialog button -->#}
+                        {#<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">#}
+                    {#</fieldset>#}
+                {#</form>#}
+            {#</div>#}
+
+
             <div id="dialog-form" title="Create new user">
                 <p class="validateTips">All form fields are required.</p>
-
-                <form>
+                {{ form_start(itemForm) }}
+                <form action="{{ path('new_item') }}" method="post">
                     <fieldset>
-                        <label for="name">Name</label>
-                        <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
-                        <label for="email">Email</label>
-                        <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
-
+                        <label for="itemDetail1">Name</label>
+                        <div id="itemDetail1" class="text ui-widget-content ui-corner-all">
+                            {{ form_row(itemForm.itemDetail1) }}
+                        </div>
+                        <label for="itemDetail2">Email</label>
+                        <div id="itemDetail2" class="text ui-widget-content ui-corner-all">
+                            {{ form_row(itemForm.itemDetail2) }}
+                        </div>
+                        <label for="itemDetail3">Password</label>
+                        <div id="itemDetail3" class="text ui-widget-content ui-corner-all">
+                            {{ form_row(itemForm.itemDetail3) }}
+                        </div>
                         <!-- Allow form submission with keyboard without duplicating the dialog button -->
+
+                        <button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>
+                        <button id="btn-form-cancel" type="submit" class="btn-form" formnovalidate>Cancel</button>
                         <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+                        {{ form_end(itemForm) }}
+
                     </fieldset>
                 </form>
             </div>

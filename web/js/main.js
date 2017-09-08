@@ -4,11 +4,10 @@ $(document).ready(function () {
         var dialog, form,
 
             // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-            emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-            name = $( "#name" ),
-            email = $( "#email" ),
-            password = $( "#password" ),
-            allFields = $( [] ).add( name ).add( email ).add( password ),
+            itemDetail1 = $( "#itemDetail1" ),
+            itemDetail2 = $( "#itemDetail2" ),
+            itemDetail3 = $( "#itemDetail3" ),
+            allFields = $( [] ).add( itemDetail1 ).add( itemDetail2 ).add( itemDetail3 ),
             tips = $( ".validateTips" );
 
         function updateTips( t ) {
@@ -20,49 +19,88 @@ $(document).ready(function () {
             }, 500 );
         }
 
-        function checkLength( o, n, min, max ) {
-            if ( o.val().length > max || o.val().length < min ) {
-                o.addClass( "ui-state-error" );
-                updateTips( "Length of " + n + " must be between " +
-                    min + " and " + max + "." );
-                return false;
-            } else {
-                return true;
-            }
-        }
 
-        function checkRegexp( o, regexp, n ) {
-            if ( !( regexp.test( o.val() ) ) ) {
-                o.addClass( "ui-state-error" );
-                updateTips( n );
-                return false;
-            } else {
-                return true;
-            }
-        }
 
-        function addUser() {
+        function addUser($form, callback) {
             var valid = true;
+
             allFields.removeClass( "ui-state-error" );
 
-            valid = valid && checkLength( name, "username", 3, 16 );
-            valid = valid && checkLength( email, "email", 6, 80 );
-            valid = valid && checkLength( password, "password", 5, 16 );
+            // var values = {};
+            // $.each( $form.serializeArray(), function(i, field) {
+            //     values[field.name] = field.value;
+            // });
+            // $.ajax({
+            //     type        : $form.attr( 'method' ),
+            //     url         : $form.attr( 'action' ),
+            //     data        : values,
+            //     success     : function(data) {
+            //         callback( data );
+            //     }
+            $('#dialog-form').submit(function (e) {
+               var url = "{{ path('new_item')}}";
+               e.preventDefault();
+               var $form = $(e.currentTarget);
+               $.ajax({
+                   url: $form.attr('action'),
+                   method: 'POST',
+                   dataType: 'json',
+                   data:  $form.serialize(),
+                   mimeType:"multipart/form-data",
+                   contentType: false,
+                   cache: false,
+                   processData:false,
+                   success: function(data, textStatus, jqXHR)
+                   {
 
-            valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-            valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-            valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
+                   },
+                   error: function(jqXHR, textStatus, errorThrown)
+                   {
+                   }
+               });
+              
+            });
+
+
+
 
             if ( valid ) {
-                $( "#users tbody" ).append( "<tr>" +
-                    "<td>" + name.val() + "</td>" +
-                    "<td>" + email.val() + "</td>" +
-                    "<td>" + password.val() + "</td>" +
-                    "</tr>" );
+                $( "#table-row" ).append( "<div class='table-fields'>" +
+                    "<span class='td'>" +
+                    "<input readonly class='item-detail' value="+itemDetail1.val()+" />" +
+                    "</span>" +
+                    "<span class='td'>" +
+                    "<input readonly class='item-detail' value=" + itemDetail2.val() + "/>" +
+                    "</span>" +
+                    "<span class='td'>" +
+                    "<input readonly class='item-detail' value=" + itemDetail3.val() + "/>" +
+                    "</span>" +
+                    "</div>" +
+                    "<div class='table-buttons'>" +
+                    "<div class='table-btn-edit'>" +
+                    "<button class='btn-edit-item'></button> " +
+                    "</div> " +
+                    "<div class='table-btn-delete'>" +
+                    "<button class='btn-delete-item'></button> " +
+                    "</div> " +
+                    "</div> ");
                 dialog.dialog( "close" );
             }
             return valid;
         }
+
+        var forms = [
+            '[ name="{{ itemForm.vars.full_name }}"]'
+        ];
+
+        $( forms.join(',') ).submit( function( e ){
+            e.preventDefault();
+
+            form( $(this), function( response ){
+            });
+
+            return false;
+        });
 
         dialog = $( "#dialog-form" ).dialog({
             autoOpen: false,
@@ -91,3 +129,4 @@ $(document).ready(function () {
         });
     } );
 });
+

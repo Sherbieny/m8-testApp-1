@@ -9,6 +9,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -49,38 +50,35 @@ class DefaultController extends FOSRestController
 
     /**
      * @param Request $request
-     * @Route("/new")
+     * @Route("/new", name="new_item")
      * @Rest\Post("/item/new")
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse|Response
      */
     public function newAction(Request $request){
-        $form = $this->createForm(ItemFormType::class);
-        $form->handleRequest($request);
+        $itemForm = $this->createForm(ItemFormType::class);
+        $itemForm->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $item = $form->getData();
+        if($request->isMethod('POST')){
+            if($itemForm->isSubmitted() && $itemForm->isValid()){
+                $item = $itemForm->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($item);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($item);
+                $em->flush();
 
-            $response = new Response(json_encode([
-                'success' => true,
-                'id' => $item->getID(),
-                'itemDetail1' => $item->getItemDetail1(),
-                'itemDetail2' => $item->getItemDetail2(),
-                'itemDetail3' => $item->getItemDetail3(),
-            ]));
+                $response['success'] = true;
+                return new JsonResponse( $response );
 
-            $response->headers->set('Content-Type', 'application/json');
-
-            return $response;
+            }else{
+                $response['success'] = false;
+                $response['cause'] = 'whatever';
+                return new JsonResponse( $response );
+            }
         }
 
 
-
         return $this->render('default/index.html.twig',[
-            'itemForm' => $form->createView()
+            'itemForm' => $itemForm->createView()
         ]);
     }
 
@@ -91,18 +89,18 @@ class DefaultController extends FOSRestController
 //     * @return \Symfony\Component\HttpFoundation\Response
 //     */
 //    public function editAction(Request $request, Item $item){
-//        $form = $this->createForm(ItemFormType::class, $item);
-//        $form->handleRequest($request);
+//        $itemForm = $this->createForm(ItemFormType::class, $item);
+//        $itemForm->handleRequest($request);
 //
-//        if($form->isSubmitted() && $form->isValid()){
-//            $item = $form->getData();
+//        if($itemForm->isSubmitted() && $itemForm->isValid()){
+//            $item = $itemForm->getData();
 //
 //            $em = $this->getDoctrine()->getManager();
 //            $em->persist($item);
 //            $em->flush();
 //        }
 //        return $this->render(':default:_form.html.twig',[
-//            'itemForm' => $form->createView()
+//            'itemForm' => $itemForm->createView()
 //        ]);
 //    }
 

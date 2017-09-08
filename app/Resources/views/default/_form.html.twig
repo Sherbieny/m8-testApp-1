@@ -10,3 +10,31 @@
     {{ form_end(itemForm) }}
 
 </div>
+
+<div id="dialog-form" title="Create new user">
+    <p class="validateTips">All form fields are required.</p>
+    {{ form_start(itemForm) }}
+    <form action="{{ path('new_item') }}" method="post">
+        <fieldset>
+            <label for="name">Name</label>
+            <div id="name" class="text ui-widget-content ui-corner-all">
+            {{ form_row(itemForm.itemDetail1) }}
+            </div>
+            <label for="email">Email</label>
+            <div id="email" class="text ui-widget-content ui-corner-all">
+            {{ form_row(itemForm.itemDetail2) }}
+            </div>
+            <label for="password">Password</label>
+            <div id="password" class="text ui-widget-content ui-corner-all">
+            {{ form_row(itemForm.itemDetail3) }}
+            </div>
+            <!-- Allow form submission with keyboard without duplicating the dialog button -->
+
+            <button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>
+            <button id="btn-form-cancel" type="submit" class="btn-form" formnovalidate>Cancel</button>
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+            {{ form_end(itemForm) }}
+
+        </fieldset>
+    </form>
+</div>

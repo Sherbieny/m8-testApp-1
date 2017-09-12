@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends FOSRestController
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="list_items")
      * @Rest\Get("/items")
      * @return Response
      */
@@ -31,8 +31,11 @@ class DefaultController extends FOSRestController
             ->getRepository('AppBundle:Item')
             ->findAll();
 
+        $itemForm = $this->createForm(ItemFormType::class);
+
         return $this->render('default/index.html.twig', [
-            'items' => $items
+            'items' => $items,
+            'itemForm' => $itemForm->createView()
         ]);
     }
 
@@ -50,12 +53,16 @@ class DefaultController extends FOSRestController
 
     /**
      * @param Request $request
-     * @Route("/new", name="new_item")
+     * @Route("/new", name="new_item", options={"expose" = true})
      * @Rest\Post("/item/new")
      * @return JsonResponse|Response
      */
     public function newAction(Request $request){
-        $itemForm = $this->createForm(ItemFormType::class);
+        $itemForm = $this->createForm(ItemFormType::class, array(
+            'method' => 'POST',
+            'attr' => 'add-item-form',
+        ));
+
         $itemForm->handleRequest($request);
 
         if($request->isMethod('POST')){

@@ -11,9 +11,9 @@ class ItemFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('itemDetail1')
-            ->add('itemDetail2')
-            ->add('itemDetail3');
+            ->add('itemDetail1', null, ['label' => false, 'attr' => ['class' => 'form-field']])
+            ->add('itemDetail2', null, ['label' => false, 'attr' => ['class' => 'form-field']])
+            ->add('itemDetail3', null, ['label' => false, 'attr' => ['class' => 'form-field']]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

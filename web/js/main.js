@@ -7,23 +7,13 @@ $(document).ready(function () {
             itemDetail1 = $( "#itemDetail1" ),
             itemDetail2 = $( "#itemDetail2" ),
             itemDetail3 = $( "#itemDetail3" ),
-            allFields = $( [] ).add( itemDetail1 ).add( itemDetail2 ).add( itemDetail3 ),
-            tips = $( ".validateTips" );
-
-        function updateTips( t ) {
-            tips
-                .text( t )
-                .addClass( "ui-state-highlight" );
-            setTimeout(function() {
-                tips.removeClass( "ui-state-highlight", 1500 );
-            }, 500 );
-        }
+            allFields = $( [] ).add( itemDetail1 ).add( itemDetail2 ).add( itemDetail3 );
 
 
 
-        function addUser($form, callback) {
+        function addUser() {
             var valid = true;
-
+            var url = window.Routing.generate('new_item');
             allFields.removeClass( "ui-state-error" );
 
             // var values = {};
@@ -38,14 +28,16 @@ $(document).ready(function () {
             //         callback( data );
             //     }
             $('#dialog-form').submit(function (e) {
-               var url = "{{ path('new_item')}}";
                e.preventDefault();
-               var $form = $(e.currentTarget);
+
+                var data = $("add-item-form").serialize();
+
+               console.log(data);
                $.ajax({
-                   url: $form.attr('action'),
+                   url: url,
                    method: 'POST',
                    dataType: 'json',
-                   data:  $form.serialize(),
+                   data:  data,
                    mimeType:"multipart/form-data",
                    contentType: false,
                    cache: false,

@@ -95,7 +95,7 @@
 
 
             <div id="dialog-form" title="Create new Item">
-                <form>
+
                 {{ form_start(itemForm, {'attr': {'id': 'add-item-form'}})}}
                     <label for="itemDetail1">Item Detail 1</label>
                     <div id="itemDetail1" class="text ui-widget-content ui-corner-all">
@@ -111,11 +111,12 @@
                     </div>
                     <!-- Allow form submission with keyboard without duplicating the dialog button -->
 
-                    <button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>
+                        <button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>
+                        {#{{ form_row(itemForm.Submit) }}#}
                     <button id="btn-form-cancel" type="submit" class="btn-form" formnovalidate>Cancel</button>
-                    <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+                        {#{{ form_row(itemForm.Cancel) }}#}
+                    {#<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">#}
                     {{ form_end(itemForm) }}
-                </form>
             </div>
 
 

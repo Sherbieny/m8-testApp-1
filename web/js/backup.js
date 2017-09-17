@@ -1,27 +1,4 @@
 $.noConflict();
-
-$.fn.serializeObject = function()
-{
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
-
-$(document).on("submit", "#add-item-form", function(e){
-    e.preventDefault();
-    return  false;
-});
-
 $(document).ready(function () {
     $( function() {
         var dialog, form,
@@ -35,12 +12,12 @@ $(document).ready(function () {
 
 
         function addUser() {
-            var data;
+            var valid = true;
             var url = Routing.generate('new_item');
             allFields.removeClass( "ui-state-error" );
 
             // var values = {};
-            // $.each( JSON.parse($('form[name=app_bundle_item_form_type]')), function(i, field) {
+            // $.each( $form.serializeArray(), function(i, field) {
             //     values[field.name] = field.value;
             // });
             // $.ajax({
@@ -50,41 +27,35 @@ $(document).ready(function () {
             //     success     : function(data) {
             //         callback( data );
             //     }
-            //    this.preventDefault();
-           // var data = $('#add-item-form').serialize();
-            //var formData = $('form[name=app_bundle_item_form_type]').serialize();
+            $('#add-item-form').submit(function (e) {
+                e.preventDefault();
+                var data = $('#add-item-form').serialize();
 
-            data = $("#add-item-form").serializeObject();
+                console.log(data);
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    dataType: 'json',
+                    data:  data,
+                    mimeType:"multipart/form-data",
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    success: function(data, textStatus, jqXHR)
+                    {
 
-            $.ajax({
-               url: url,
-               method: 'POST',
-               dataType: 'json',
-               data:  data,
-               mimeType:"multipart/form-data",
-               contentType: false,
-               cache: false,
-               processData:false,
-               success: function(data)
-               {
-                    alert('a7aaaa');
-                    console.log(data);
-                   if(data.status == 'saved'){
-                       console.log("entity saved ! ");
-                   }
-                   if(data.status == 'invalid'){
-                       console.log("entity submitted was invalid, use try catch and getMessage of eventual errors in you controller action, you can pass all that to the returning array you can receive and parse here ! ");
-                   }
-               },
-               error: function(jqXHR, textStatus, errorThrown)
-               {
-               }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                    }
+                });
+
             });
 
 
 
 
-
+            if ( valid ) {
                 $( "#table-row" ).append( "<div class='table-fields'>" +
                     "<span class='td'>" +
                     "<input readonly class='item-detail' value="+itemDetail1.val()+" />" +
@@ -105,7 +76,8 @@ $(document).ready(function () {
                     "</div> " +
                     "</div> ");
                 dialog.dialog( "close" );
-
+            }
+            return valid;
         }
 
         var forms = [
@@ -126,14 +98,10 @@ $(document).ready(function () {
             height: 400,
             width: 350,
             modal: true,
-            buttons:
-            {
-             'Add Item': function () {
-                 addUser();
-                 dialog.dialog("close");
-                },
-            'Cancel': function () {
-                 dialog.dialog("close");
+            buttons: {
+                "Create an account": addUser,
+                Cancel: function() {
+                    dialog.dialog( "close" );
                 }
             },
             close: function() {
@@ -144,8 +112,7 @@ $(document).ready(function () {
 
         form = dialog.find( "form" ).on( "submit", function( event ) {
             event.preventDefault();
-            //addUser();
-            console.log("a7a men form");
+            addUser();
         });
 
         $( "#create-user" ).button().on( "click", function() {
@@ -154,3 +121,13 @@ $(document).ready(function () {
     } );
 });
 
+
+buttons: {
+    'Confirm': function() {
+        //do something
+        $(this).dialog('close');
+    },
+    'Cancel': function() {
+        $(this).dialog('close');
+    }
+}

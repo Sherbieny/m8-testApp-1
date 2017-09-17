@@ -4,11 +4,15 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Item;
 use AppBundle\Form\ItemFormType;
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,41 +56,41 @@ class DefaultController extends FOSRestController
     }
 
     /**
-     * @param Request $request
      * @Route("/new", name="new_item", options={"expose" = true})
-     * @Rest\Post("/item/new")
-     * @return JsonResponse|Response
+     * @Method({"POST"})
      */
     public function newAction(Request $request){
-        $itemForm = $this->createForm(ItemFormType::class, array(
-            'method' => 'POST',
-            'attr' => 'add-item-form',
-        ));
+
+        $item = new Item();
+        $itemForm = $this->createForm(ItemFormType::class, $item);
 
         $itemForm->handleRequest($request);
+        $status = "";
 
-        if($request->isMethod('POST')){
-            if($itemForm->isSubmitted() && $itemForm->isValid()){
-                $item = $itemForm->getData();
 
-                $em = $this->getDoctrine()->getManager();
+            $item = $itemForm->getData();
+
+            $em = $this->getDoctrine()->getManager();
+
+            try {
                 $em->persist($item);
                 $em->flush();
-
-                $response['success'] = true;
-                return new JsonResponse( $response );
-
-            }else{
-                $response['success'] = false;
-                $response['cause'] = 'whatever';
-                return new JsonResponse( $response );
+                $status = "saved";
+            } catch (NotNullConstraintViolationException $e) {
+                return new JsonResponse();
+            } catch (UniqueConstraintViolationException $e) {
+                return new JsonResponse();
+            } catch (\Exception $e) {
+                $handler = new ExceptionHandler();
+                $handler->handle($e);
+                return new JsonResponse([
+                    'status' => 'errorException',
+                    'message' => $e->getMessage()
+                ]);
             }
-        }
 
 
-        return $this->render('default/index.html.twig',[
-            'itemForm' => $itemForm->createView()
-        ]);
+        return new JsonResponse(array('status' => $status));
     }
 
 //    /**

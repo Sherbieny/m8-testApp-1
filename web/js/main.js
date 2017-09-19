@@ -22,22 +22,61 @@ $(document).on("submit", "#add-item-form", function(e){
     return  false;
 });
 
+
+$(document).ready(function () {
+
+    $.ajax({
+        url: '/items',
+        method: 'GET',
+        dataType: 'json',
+        cache: false,
+        processData:false,
+        success: function(data, textStatus, xhr)
+        {
+            if (xhr.status == 200){
+                console.log("Items queried!");
+                console.log(data);
+                $.each(data, function (key, value) {
+                    if (jQuery.isEmptyObject(data)){
+                        console.log('object is empty a7a');
+                    }else{
+                        console.log('object is full a7a');
+                    }
+                });
+                console.log(textStatus);
+            }else {
+                console.log("Error!");
+            }
+
+
+        },
+        error: function(jqXHR, textStatus, errorThrown)
+        {
+
+            console.log("TextStatus:----------");
+            console.log(textStatus);
+            console.log("ErrorThrown:----------");
+            console.log(errorThrown);
+            console.log("JqXHR:----------");
+            console.log(jqXHR);
+        }
+    });
+});
+
 $(document).ready(function () {
     $( function() {
-        var dialog, form,
+        var dialog, form;
 
-            // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
-            itemDetail1 = $( "#itemDetail1" ),
-            itemDetail2 = $( "#itemDetail2" ),
-            itemDetail3 = $( "#itemDetail3" ),
-            allFields = $( [] ).add( itemDetail1 ).add( itemDetail2 ).add( itemDetail3 );
-
+            // itemDetail1 = $( "#itemDetail1" ).val(),
+            // itemDetail2 = $( "#itemDetail2" ).val(),
+            // itemDetail3 = $( "#itemDetail3" ).val(),
+            // allFields = $( [] ).add( itemDetail1 ).add( itemDetail2 ).add( itemDetail3 );
 
 
         function addUser() {
             var data;
-            var url = Routing.generate('new_item');
-            allFields.removeClass( "ui-state-error" );
+            var url = '/item/new/';
+            // allFields.removeClass( "ui-state-error" );
 
             // var values = {};
             // $.each( JSON.parse($('form[name=app_bundle_item_form_type]')), function(i, field) {
@@ -54,7 +93,7 @@ $(document).ready(function () {
            // var data = $('#add-item-form').serialize();
             //var formData = $('form[name=app_bundle_item_form_type]').serialize();
 
-            data = $("#add-item-form").serializeObject();
+            data = JSON.stringify($('form').serializeArray());
 
             $.ajax({
                url: url,
@@ -62,22 +101,24 @@ $(document).ready(function () {
                dataType: 'json',
                data:  data,
                mimeType:"multipart/form-data",
-               contentType: false,
+               contentType: 'application/x-www-form-urlencoded',
                cache: false,
                processData:false,
-               success: function(data)
+               success: function(data, textStatus, xhr)
                {
-                    alert('a7aaaa');
-                    console.log(data);
-                   if(data.status == 'saved'){
-                       console.log("entity saved ! ");
-                   }
-                   if(data.status == 'invalid'){
-                       console.log("entity submitted was invalid, use try catch and getMessage of eventual errors in you controller action, you can pass all that to the returning array you can receive and parse here ! ");
-                   }
+                    if (xhr.status == 200){
+                        console.log("Item Saved!");
+                    }else {
+                        console.log("Error!");
+                    }
+
+
                },
                error: function(jqXHR, textStatus, errorThrown)
                {
+                   console.log(data);
+                   console.log(errorThrown);
+                   console.log(jqXHR);
                }
             });
 
@@ -87,13 +128,13 @@ $(document).ready(function () {
 
                 $( "#table-row" ).append( "<div class='table-fields'>" +
                     "<span class='td'>" +
-                    "<input readonly class='item-detail' value="+itemDetail1.val()+" />" +
+                    "<input readonly class='item-detail'/>" +
                     "</span>" +
                     "<span class='td'>" +
-                    "<input readonly class='item-detail' value=" + itemDetail2.val() + "/>" +
+                    "<input readonly class='item-detail'/>" +
                     "</span>" +
                     "<span class='td'>" +
-                    "<input readonly class='item-detail' value=" + itemDetail3.val() + "/>" +
+                    "<input readonly class='item-detail'/>" +
                     "</span>" +
                     "</div>" +
                     "<div class='table-buttons'>" +
@@ -138,7 +179,6 @@ $(document).ready(function () {
             },
             close: function() {
                 form[ 0 ].reset();
-                allFields.removeClass( "ui-state-error" );
             }
         });
 

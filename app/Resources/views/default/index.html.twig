@@ -74,50 +74,49 @@
 
 
             </div>
-
-            {#<div id="dialog-form" title="Create new user">#}
-                {#<p class="validateTips">All form fields are required.</p>#}
-
-                {#<form>#}
-                    {#<fieldset>#}
-                        {#<label for="name">Name</label>#}
-                        {#<input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">#}
-                        {#<label for="email">Email</label>#}
-                        {#<input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">#}
-                        {#<label for="password">Password</label>#}
-                        {#<input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">#}
-
-                        {#<!-- Allow form submission with keyboard without duplicating the dialog button -->#}
-                        {#<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">#}
-                    {#</fieldset>#}
-                {#</form>#}
-            {#</div>#}
-
-
             <div id="dialog-form" title="Create new Item">
+                <p class="validateTips">All form fields are required.</p>
 
-                {{ form_start(itemForm, {'attr': {'id': 'add-item-form'}})}}
-                    <label for="itemDetail1">Item Detail 1</label>
-                    <div id="itemDetail1" class="text ui-widget-content ui-corner-all">
-                        {{ form_row(itemForm.itemDetail1) }}
-                    </div>
-                    <label for="itemDetail2">Item Detail 2</label>
-                    <div id="itemDetail2" class="text ui-widget-content ui-corner-all">
-                        {{ form_row(itemForm.itemDetail2) }}
-                    </div>
-                    <label for="itemDetail3">Item Detail 3</label>
-                    <div id="itemDetail3" class="text ui-widget-content ui-corner-all">
-                        {{ form_row(itemForm.itemDetail3) }}
-                    </div>
-                    <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <form>
+                    <fieldset>
+                        <label for="itemDetail1">Item Detail 1</label>
+                        <input name="itemDetail1" id="itemDetail1" class="text ui-widget-content ui-corner-all">
+                        <label for="itemDetail2">Item Detail 2</label>
+                        <input name="itemDetail2" id="itemDetail2" class="text ui-widget-content ui-corner-all">
+                        <label for="itemDetail3">Item Detail 3</label>
+                        <input name="itemDetail3" id="itemDetail3" class="text ui-widget-content ui-corner-all">
 
-                        <button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>
+                        <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+                    </fieldset>
+                </form>
+            </div>
+
+
+            {#<div id="dialog-form" title="Create new Item">#}
+
+                {#{{ form_start(itemForm, {'attr': {'id': 'add-item-form'}})}}#}
+                    {#<label for="itemDetail1">Item Detail 1</label>#}
+                    {#<div id="itemDetail1" class="text ui-widget-content ui-corner-all">#}
+                        {#{{ form_row(itemForm.itemDetail1) }}#}
+                    {#</div>#}
+                    {#<label for="itemDetail2">Item Detail 2</label>#}
+                    {#<div id="itemDetail2" class="text ui-widget-content ui-corner-all">#}
+                        {#{{ form_row(itemForm.itemDetail2) }}#}
+                    {#</div>#}
+                    {#<label for="itemDetail3">Item Detail 3</label>#}
+                    {#<div id="itemDetail3" class="text ui-widget-content ui-corner-all">#}
+                        {#{{ form_row(itemForm.itemDetail3) }}#}
+                    {#</div>#}
+                    {#<!-- Allow form submission with keyboard without duplicating the dialog button -->#}
+
+                        {#<button id="btn-form-submit" type="submit" class="btn-form" formnovalidate>Submit</button>#}
                         {#{{ form_row(itemForm.Submit) }}#}
-                    <button id="btn-form-cancel" type="submit" class="btn-form" formnovalidate>Cancel</button>
+                    {#<button id="btn-form-cancel" type="submit" class="btn-form" formnovalidate>Cancel</button>#}
                         {#{{ form_row(itemForm.Cancel) }}#}
                     {#<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">#}
-                    {{ form_end(itemForm) }}
-            </div>
+                    {#{{ form_end(itemForm) }}#}
+            {#</div>#}
 
 
             <div id="users-contain" class="ui-widget">
